@@ -1,19 +1,12 @@
 # daily-done-frontend
 
-## Project setup
+## Beschreibung
 ```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
+Die Seite zeigt eine Liste von Gewohnheiten, die in farblich abgesetzten Karten dargestellt werden.  
+Jeder Eintrag enthält ein Icon, einen Titel und einen Fortschrittsbalken.  
+Das Layout ist zentriert und im Pastellstil gehalten – mit sanften Farben, runden Ecken und einem ruhigen Gesamtbild.  
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Projekt starten
+1. npm run serve
+2. http://localhost:8080
