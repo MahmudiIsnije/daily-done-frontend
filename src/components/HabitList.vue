@@ -29,7 +29,7 @@ export default {
     };
   },
   mounted() {
-    fetch("https://daily-done-qztv.onrender.com")
+    fetch("https://daily-done-qztv.onrender.com/api/habits")
         .then(response => response.json())
         .then(data => {
           this.habits = data;
