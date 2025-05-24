@@ -25,12 +25,18 @@ export default {
   data() {
     return {
       quote: "✨ Kleine Schritte führen zu großen Erfolgen!",
-      habits: [
-        { id: 1, name: "💧 Wasser trinken", progress: 80 },
-        { id: 2, name: "📖 Lesen", progress: 40 },
-        { id: 3, name: "🧘‍♀️ Meditieren", progress: 60 }
-      ]
+      habits: []
     };
+  },
+  mounted() {
+    fetch("https://daily-done-qztv.onrender.com")
+        .then(response => response.json())
+        .then(data => {
+          this.habits = data;
+        })
+        .catch(error => {
+          console.error("Fehler beim Laden der Habits:", error);
+        });
   }
 };
 </script>
