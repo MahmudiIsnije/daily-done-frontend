@@ -3,6 +3,14 @@
     <div class="habit-list">
       <h2>Meine Gewohnheiten</h2>
       <p class="quote">{{ quote }}</p>
+
+      <!-- Das FORMULAR gehört hier rein -->
+      <form @submit.prevent="addHabit" class="new-habit-form">
+        <input v-model="newHabit.name" placeholder="Name" required />
+        <input v-model="newHabit.description" placeholder="Beschreibung" required />
+        <button type="submit">➕ Hinzufügen</button>
+      </form>
+
       <ul>
         <li
             v-for="habit in habits"
@@ -18,11 +26,8 @@
     </div>
   </div>
 </template>
-<form @submit.prevent="addHabit" class="new-habit-form">
-<input v-model="newHabit.name" placeholder="Name" required />
-<input v-model="newHabit.description" placeholder="Beschreibung" required />
-<button type="submit">➕ Hinzufügen</button>
-</form>
+
+
 
 
 <script>
