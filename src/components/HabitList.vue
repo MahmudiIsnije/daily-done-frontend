@@ -115,6 +115,8 @@ export default {
       this.editingHabitId = null;
     },
     saveEdit(id) {
+      console.log("Wird gesendet:", this.editHabit); // 👈 DAS HIER NEU
+
       if (!this.editHabit.name.trim() || !this.editHabit.description.trim()) {
         alert("Bitte gib Name und Beschreibung ein.");
         return;
@@ -140,6 +142,7 @@ export default {
             console.error("Fehler beim Bearbeiten:", error);
           });
     }
+
 
   }
 };
