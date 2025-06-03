@@ -109,6 +109,11 @@ export default {
       this.editingHabitId = null;
     },
     saveEdit(id) {
+      if (!this.editHabit.name.trim() || !this.editHabit.description.trim()) {
+        alert("Bitte gib Name und Beschreibung ein.");
+        return;
+      }
+
       fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}`, {
         method: "PUT",
         headers: {
@@ -129,6 +134,7 @@ export default {
             console.error("Fehler beim Bearbeiten:", error);
           });
     }
+
   }
 };
 </script>
