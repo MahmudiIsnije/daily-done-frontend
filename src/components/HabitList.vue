@@ -4,7 +4,6 @@
       <h2>Meine Gewohnheiten</h2>
       <p class="quote">{{ quote }}</p>
 
-      <!-- Das FORMULAR gehört hier rein -->
       <form @submit.prevent="addHabit" class="new-habit-form">
         <input v-model="newHabit.name" placeholder="Name" required />
         <input v-model="newHabit.description" placeholder="Beschreibung" required />
@@ -17,7 +16,11 @@
             :key="habit.id"
             class="habit-item"
         >
-          {{ habit.name }}
+          <div class="habit-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <strong>{{ habit.name }}</strong>
+            <button @click="deleteHabit(habit.id)">🗑️ Löschen</button>
+          </div>
+
           <div class="progress-bar">
             <div class="progress-fill" :style="{ width: habit.progress + '%' }"></div>
           </div>
@@ -74,7 +77,19 @@ export default {
           .catch(error => {
             console.error("Fehler beim Erstellen der Habit:", error);
           });
+    },
+    deleteHabit(id) {
+      fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}`, {
+        method: "DELETE"
+      })
+          .then(() => {
+            this.habits = this.habits.filter(habit => habit.id !== id);
+          })
+          .catch(error => {
+            console.error("Fehler beim Löschen:", error);
+          });
     }
+
   }
 
 };
@@ -167,4 +182,16 @@ ul {
   background-color: #52B2CF;
   transition: width 0.5s ease;
 }
+button {
+  background-color: transparent;
+  border: none;
+  color: red;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+button:hover {
+  text-decoration: underline;
+}
+
 </style>
