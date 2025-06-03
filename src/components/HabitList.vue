@@ -42,7 +42,10 @@ export default {
     fetch("https://daily-done-qztv.onrender.com/api/habits")
         .then(response => response.json())
         .then(data => {
-          this.habits = data;
+          this.habits = data.map(habit => ({
+            ...habit,
+            progress: 50 // temporärer Wert
+          }));
         })
         .catch(error => {
           console.error("Fehler beim Laden der Habits:", error);
