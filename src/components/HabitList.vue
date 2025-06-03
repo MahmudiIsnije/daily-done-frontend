@@ -115,9 +115,14 @@ export default {
       this.editingHabitId = null;
     },
     saveEdit(id) {
-      console.log("Wird gesendet:", this.editHabit); // 👈 DAS HIER NEU
+      const habitData = {
+        name: this.editHabit.name,
+        description: this.editHabit.description
+      };
 
-      if (!this.editHabit.name.trim() || !this.editHabit.description.trim()) {
+      console.log("Wird gesendet:", habitData);
+
+      if (!habitData.name.trim() || !habitData.description.trim()) {
         alert("Bitte gib Name und Beschreibung ein.");
         return;
       }
@@ -127,9 +132,14 @@ export default {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(this.editHabit)
+        body: JSON.stringify(habitData)
       })
-          .then(response => response.json())
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Fehler vom Server");
+            }
+            return response.json();
+          })
           .then(updated => {
             const index = this.habits.findIndex(h => h.id === id);
             if (index !== -1) {
@@ -142,6 +152,7 @@ export default {
             console.error("Fehler beim Bearbeiten:", error);
           });
     }
+
 
 
   }
