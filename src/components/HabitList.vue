@@ -23,7 +23,10 @@
             <button @click="cancelEdit">❌ Abbrechen</button>
           </div>
           <div v-else class="habit-header" style="display: flex; justify-content: space-between; align-items: center;">
-            <strong>{{ habit.name }}</strong>
+            <div>
+              <strong>{{ habit.name }}</strong><br />
+              <small>{{ habit.description }}</small>
+            </div>
             <div>
               <button @click="startEdit(habit)">✏️ Bearbeiten</button>
               <button @click="deleteHabit(habit.id)">🗑️ Löschen</button>
