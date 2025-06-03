@@ -16,9 +16,18 @@
             :key="habit.id"
             class="habit-item"
         >
-          <div class="habit-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div v-if="editingHabitId === habit.id">
+            <input v-model="editHabit.name" placeholder="Neuer Name" />
+            <input v-model="editHabit.description" placeholder="Neue Beschreibung" />
+            <button @click="saveEdit(habit.id)">💾 Speichern</button>
+            <button @click="cancelEdit">❌ Abbrechen</button>
+          </div>
+          <div v-else class="habit-header" style="display: flex; justify-content: space-between; align-items: center;">
             <strong>{{ habit.name }}</strong>
-            <button @click="deleteHabit(habit.id)">🗑️ Löschen</button>
+            <div>
+              <button @click="startEdit(habit)">✏️ Bearbeiten</button>
+              <button @click="deleteHabit(habit.id)">🗑️ Löschen</button>
+            </div>
           </div>
 
           <div class="progress-bar">
@@ -31,8 +40,6 @@
 </template>
 
 
-
-
 <script>
 export default {
   name: "HabitList",
@@ -41,6 +48,11 @@ export default {
       quote: "✨ Kleine Schritte führen zu großen Erfolgen!",
       habits: [],
       newHabit: {
+        name: "",
+        description: ""
+      },
+      editingHabitId: null,
+      editHabit: {
         name: "",
         description: ""
       }
@@ -88,10 +100,36 @@ export default {
           .catch(error => {
             console.error("Fehler beim Löschen:", error);
           });
+    },
+    startEdit(habit) {
+      this.editingHabitId = habit.id;
+      this.editHabit = {name: habit.name, description: habit.description};
+    },
+    cancelEdit() {
+      this.editingHabitId = null;
+    },
+    saveEdit(id) {
+      fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(this.editHabit)
+      })
+          .then(response => response.json())
+          .then(updated => {
+            const index = this.habits.findIndex(h => h.id === id);
+            if (index !== -1) {
+              this.habits[index].name = updated.name;
+              this.habits[index].description = updated.description;
+            }
+            this.editingHabitId = null;
+          })
+          .catch(error => {
+            console.error("Fehler beim Bearbeiten:", error);
+          });
     }
-
   }
-
 };
 </script>
 
@@ -182,6 +220,7 @@ ul {
   background-color: #52B2CF;
   transition: width 0.5s ease;
 }
+
 button {
   background-color: transparent;
   border: none;
