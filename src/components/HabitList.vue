@@ -106,7 +106,10 @@ export default {
     },
     startEdit(habit) {
       this.editingHabitId = habit.id;
-      this.editHabit = {name: habit.name, description: habit.description};
+      this.editHabit = {
+        name: habit.name,
+        description: habit.description
+      };
     },
     cancelEdit() {
       this.editingHabitId = null;
