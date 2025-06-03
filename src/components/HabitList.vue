@@ -18,6 +18,12 @@
     </div>
   </div>
 </template>
+<form @submit.prevent="addHabit" class="new-habit-form">
+<input v-model="newHabit.name" placeholder="Name" required />
+<input v-model="newHabit.description" placeholder="Beschreibung" required />
+<button type="submit">➕ Hinzufügen</button>
+</form>
+
 
 <script>
 export default {
@@ -25,7 +31,11 @@ export default {
   data() {
     return {
       quote: "✨ Kleine Schritte führen zu großen Erfolgen!",
-      habits: []
+      habits: [],
+      newHabit: {
+        name: "",
+        description: ""
+      }
     };
   },
   mounted() {
@@ -37,7 +47,28 @@ export default {
         .catch(error => {
           console.error("Fehler beim Laden der Habits:", error);
         });
+  },
+  methods: {
+    addHabit() {
+      fetch("https://daily-done-qztv.onrender.com/api/habits", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(this.newHabit)
+      })
+          .then(response => response.json())
+          .then(data => {
+            this.habits.push(data);
+            this.newHabit.name = "";
+            this.newHabit.description = "";
+          })
+          .catch(error => {
+            console.error("Fehler beim Erstellen der Habit:", error);
+          });
+    }
   }
+
 };
 </script>
 
