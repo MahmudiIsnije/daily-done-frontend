@@ -120,8 +120,6 @@ export default {
         description: this.editHabit.description
       };
 
-      console.log("Wird gesendet:", habitData);
-
       if (!habitData.name.trim() || !habitData.description.trim()) {
         alert("Bitte gib Name und Beschreibung ein.");
         return;
@@ -136,25 +134,34 @@ export default {
       })
           .then(response => {
             if (!response.ok) {
-              throw new Error("Fehler vom Server");
+              throw new Error("Serverantwort war nicht OK");
             }
             return response.json();
           })
           .then(updated => {
+            if (!updated || !updated.name) {
+              console.error("Ungültige Antwort vom Server:", updated);
+              alert("Fehler beim Speichern.");
+              return;
+            }
+
             const index = this.habits.findIndex(h => h.id === id);
             if (index !== -1) {
-              this.habits[index].name = updated.name;
-              this.habits[index].description = updated.description;
+              // Vue.set(this.habits, index, updated); // Vue 2
+              this.habits[index] = {
+                ...this.habits[index],
+                ...updated,
+                progress: this.habits[index].progress // progress behalten
+              };
             }
+
             this.editingHabitId = null;
           })
           .catch(error => {
             console.error("Fehler beim Bearbeiten:", error);
+            alert("Fehler beim Speichern. Schau in die Konsole.");
           });
     }
-
-
-
   }
 };
 </script>
