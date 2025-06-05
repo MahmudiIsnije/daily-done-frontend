@@ -170,6 +170,7 @@ export default {
           });
     },
     checkHabitToday(id) {
+      console.log("Abhaken wurde gedrückt für Habit:", id);
       fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}/check`, {
         method: "POST"
       })
