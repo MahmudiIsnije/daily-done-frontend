@@ -73,17 +73,7 @@ export default {
 
 
   mounted() {
-    fetch("https://daily-done-qztv.onrender.com/api/habits")
-        .then(response => response.json())
-        .then(data => {
-          this.habits = data.map(habit => ({
-            ...habit,
-            progress: 50 // temporärer Wert
-          }));
-        })
-        .catch(error => {
-          console.error("Fehler beim Laden der Habits:", error);
-        });
+    this.loadHabits();
     fetch("https://daily-done-qztv.onrender.com/api/habits/checks/month/2025-06")
         .then(response => response.json())
         .then(data => {
@@ -99,7 +89,7 @@ export default {
             }
           }));
         });
-    },
+  },
 
 
   methods: {
@@ -140,6 +130,7 @@ export default {
       };
     },
     cancelEdit() {
+      this.loadHabits();
       this.editingHabitId = null;
     },
     saveEdit(id) {
@@ -208,7 +199,20 @@ export default {
           .catch(error => {
             console.error("Fehler beim Abhaken:", error);
           });
-    }
+    },
+    loadHabits() {
+      fetch("https://daily-done-qztv.onrender.com/api/habits")
+          .then(response => response.json())
+          .then(data => {
+            this.habits = data.map(habit => ({
+              ...habit,
+              progress: 50
+            }));
+          })
+          .catch(error => {
+            console.error("Fehler beim Laden der Habits:", error);
+          });
+    },
   }
 };
 </script>
