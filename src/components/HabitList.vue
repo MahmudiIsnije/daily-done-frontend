@@ -40,6 +40,11 @@
           </div>
         </li>
       </ul>
+      <h2 style="margin-top: 40px;">📅 Kalender</h2>
+      <v-calendar
+          is-expanded
+          :attributes="calendarAttributes"
+      />
     </div>
   </div>
 </template>
@@ -62,6 +67,7 @@ export default {
         description: ""
       },
       checkedToday: [],
+      calendarAttributes: []
     };
   },
 
@@ -78,7 +84,22 @@ export default {
         .catch(error => {
           console.error("Fehler beim Laden der Habits:", error);
         });
-  },
+    fetch("https://daily-done-qztv.onrender.com/api/habits/checks/month/2025-06")
+        .then(response => response.json())
+        .then(data => {
+          this.calendarAttributes = data.map(check => ({
+            key: check.id,
+            dates: new Date(check.date),
+            highlight: {
+              backgroundColor: '#52B2CF',
+              borderRadius: '50%'
+            },
+            popover: {
+              label: check.habit.name
+            }
+          }));
+        });
+    },
 
 
   methods: {
