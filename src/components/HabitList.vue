@@ -115,9 +115,9 @@ export default {
             return response.json();
           })
           .then(data => {
-            if (!data.id) {
-              console.error("Fehlende ID bei neuem Habit:", data);
-              alert("Fehler: Habit hat keine ID.");
+            if (!data || !data.id) {
+              alert("FEHLER: Der Server hat keine gültige ID zurückgegeben.");
+              console.error("Fehlerhafte Antwort vom Server:", data);
               return;
             }
 
