@@ -77,17 +77,26 @@ export default {
     fetch("https://daily-done-qztv.onrender.com/api/habits/checks/month/2025-06")
         .then(response => response.json())
         .then(data => {
-          this.calendarAttributes = data.map(check => ({
-            key: check.id,
-            dates: new Date(check.date),
-            highlight: {
-              backgroundColor: '#52B2CF',
-              borderRadius: '50%'
-            },
-            popover: {
-              label: check.habit.name
+          this.calendarAttributes = data.map(check => {
+            const habitName = check.habit?.name || "Unbekannt";
+            const isToday = new Date(check.date).toDateString() === new Date().toDateString();
+
+            if (isToday && check.habit?.id) {
+              this.checkedToday.push(check.habit.id);
             }
-          }));
+
+            return {
+              key: check.id,
+              dates: new Date(check.date),
+              highlight: {
+                backgroundColor: '#52B2CF',
+                borderRadius: '50%'
+              },
+              popover: {
+                label: habitName
+              }
+            };
+          });
         });
   },
 
@@ -101,9 +110,21 @@ export default {
         },
         body: JSON.stringify(this.newHabit)
       })
-          .then(response => response.json())
+          .then(response => {
+            if (!response.ok) throw new Error("Fehler beim Erstellen des Habits");
+            return response.json();
+          })
           .then(data => {
-            this.habits.push(data);
+            if (!data.id) {
+              console.error("Fehlende ID bei neuem Habit:", data);
+              alert("Fehler: Habit hat keine ID.");
+              return;
+            }
+
+            this.habits.push({
+              ...data,
+              progress: 50
+            });
             this.newHabit.name = "";
             this.newHabit.description = "";
           })
