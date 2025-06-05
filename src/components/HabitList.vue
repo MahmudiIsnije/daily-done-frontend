@@ -225,15 +225,17 @@ export default {
       fetch("https://daily-done-qztv.onrender.com/api/habits")
           .then(response => response.json())
           .then(data => {
-            this.habits = data.map(habit => ({
-              ...habit,
-              progress: 50
-            }));
+            this.habits = data
+                .filter(habit => habit.id && habit.id > 0) // 💡 nur gültige IDs zulassen
+                .map(habit => ({
+                  ...habit,
+                  progress: 50
+                }));
           })
           .catch(error => {
             console.error("Fehler beim Laden der Habits:", error);
           });
-    },
+    }
   }
 };
 </script>
