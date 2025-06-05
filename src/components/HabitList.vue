@@ -30,6 +30,8 @@
             <div>
               <button @click="startEdit(habit)">✏️ Bearbeiten</button>
               <button @click="deleteHabit(habit.id)">🗑️ Löschen</button>
+              <button @click="checkHabitToday(habit.id)">✅ Abhaken</button>
+              <span v-if="checkedToday.includes(habit.id)">Heute erledigt ✅</span>
             </div>
           </div>
 
@@ -58,9 +60,12 @@ export default {
       editHabit: {
         name: "",
         description: ""
-      }
+      },
+      checkedToday: [],
     };
   },
+
+
   mounted() {
     fetch("https://daily-done-qztv.onrender.com/api/habits")
         .then(response => response.json())
@@ -74,6 +79,8 @@ export default {
           console.error("Fehler beim Laden der Habits:", error);
         });
   },
+
+
   methods: {
     addHabit() {
       fetch("https://daily-done-qztv.onrender.com/api/habits", {
@@ -160,6 +167,24 @@ export default {
           .catch(error => {
             console.error("Fehler beim Bearbeiten:", error);
             alert("Fehler beim Speichern. Schau in die Konsole.");
+          });
+    },
+    checkHabitToday(id) {
+      fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}/check`, {
+        method: "POST"
+      })
+          .then(response => {
+            if (response.status === 409) {
+              alert("Heute bereits abgehakt!");
+              return;
+            }
+            if (!response.ok) {
+              throw new Error("Fehler beim Abhaken");
+            }
+            this.checkedToday.push(id);
+          })
+          .catch(error => {
+            console.error("Fehler beim Abhaken:", error);
           });
     }
   }
@@ -265,5 +290,11 @@ button {
 button:hover {
   text-decoration: underline;
 }
+span {
+  margin-left: 10px;
+  color: green;
+  font-weight: bold;
+}
+
 
 </style>
