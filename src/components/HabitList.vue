@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <h1 class="headline">Daily Done</h1>
+    <h1 class="headline">🌟 Daily Done 🏆</h1>
     <div class="main-grid">
 
       <div class="left-side">
@@ -254,13 +254,16 @@ export default {
   padding: 20px;
   background-color: #f0f4f8;
   min-height: 100vh;
+  font-family: system-ui, sans-serif;
 }
+
 
 .headline {
   text-align: center;
-  font-size: 36px;
+  font-size: 48px; /* vorher war 36px – jetzt größer */
   margin-bottom: 30px;
-  color: #52B2CF;
+  color: #1995ba;
+  font-weight: 700;
 }
 
 .main-grid {
