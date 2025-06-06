@@ -85,7 +85,7 @@ export default {
 
   mounted() {
     this.loadHabits();
-    fetch("http://localhost:8080/api/habits")
+    fetch("http://localhost:8080/api/habits/checks/month/2025-06")
         .then(response => response.json())
         .then(data => {
           this.calendarAttributes = data.map(check => {
@@ -144,7 +144,7 @@ export default {
           });
     },
     deleteHabit(id) {
-      fetch(`http://localhost:8080/api/habits${id}`, {
+      fetch(`http://localhost:8080/api/habits/${id}`, {
         method: "DELETE"
       })
           .then(() => {
@@ -213,7 +213,7 @@ export default {
           });
     },
     checkHabitToday(id) {
-      fetch(`http://localhost:8080/api/habits`, {
+      fetch(`http://localhost:8080/api/habits/${id}/check`, {
         method: "POST"
       })
           .then(response => {
