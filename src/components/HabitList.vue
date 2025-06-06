@@ -85,7 +85,7 @@ export default {
 
   mounted() {
     this.loadHabits();
-    fetch("http://localhost:8080/api/habits/checks/month/2025-06")
+    fetch("https://daily-done-qztv.onrender.com/api/habits/checks/month/2025-06")
         .then(response => response.json())
         .then(data => {
           this.calendarAttributes = data.map(check => {
@@ -114,7 +114,7 @@ export default {
 
   methods: {
     addHabit() {
-      fetch("http://localhost:8080/api/habits", {
+      fetch("https://daily-done-qztv.onrender.com/api/habits", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -144,7 +144,7 @@ export default {
           });
     },
     deleteHabit(id) {
-      fetch(`http://localhost:8080/api/habits/${id}`, {
+      fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}`, {
         method: "DELETE"
       })
           .then(() => {
@@ -176,7 +176,7 @@ export default {
         return;
       }
 
-      fetch(`http://localhost:8080/api/habits${id}`, {
+      fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
@@ -213,7 +213,7 @@ export default {
           });
     },
     checkHabitToday(id) {
-      fetch(`http://localhost:8080/api/habits/${id}/check`, {
+      fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}/check`, {
         method: "POST"
       })
           .then(response => {
@@ -249,7 +249,7 @@ export default {
 
 
     loadHabits() {
-      fetch("http://localhost:8080/api/habits")
+      fetch("https://daily-done-qztv.onrender.com/api/habits")
           .then(response => response.json())
           .then(data => {
             this.habits = data
