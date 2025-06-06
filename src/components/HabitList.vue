@@ -85,7 +85,8 @@ export default {
 
   mounted() {
     this.loadHabits();
-    fetch("https://daily-done-qztv.onrender.com/api/habits/checks/month/2025-06")
+    const API = process.env.VUE_APP_API_URL;
+    fetch(`${API}/habits/checks/month/2025-06`)
         .then(response => response.json())
         .then(data => {
           this.calendarAttributes = data.map(check => {
@@ -114,7 +115,15 @@ export default {
 
   methods: {
     addHabit() {
-      fetch("https://daily-done-qztv.onrender.com/api/habits", {
+      const API = import.meta.env.VITE_API_URL;
+      if (!this.newHabit.name.trim() || !this.newHabit.description.trim()) {
+        alert("Bitte gib einen Namen und eine Beschreibung ein.");
+        return;
+      }
+
+      console.log("📦 Wird gesendet:", this.newHabit);
+
+      fetch(`${API}/habits`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -143,8 +152,10 @@ export default {
             console.error("Fehler beim Erstellen der Habit:", error);
           });
     },
+
     deleteHabit(id) {
-      fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}`, {
+      const API = import.meta.env.VITE_API_URL;
+      fetch(`${API}/habits/${id}`, {
         method: "DELETE"
       })
           .then(() => {
@@ -176,7 +187,8 @@ export default {
         return;
       }
 
-      fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}`, {
+      const API = import.meta.env.VITE_API_URL;
+      fetch(`${API}/habits/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
@@ -213,7 +225,8 @@ export default {
           });
     },
     checkHabitToday(id) {
-      fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}/check`, {
+      const API = import.meta.env.VITE_API_URL;
+      fetch(`${API}/habits/${id}/check`, {
         method: "POST"
       })
           .then(response => {
@@ -249,8 +262,8 @@ export default {
 
 
     loadHabits() {
-      fetch("https://daily-done-qztv.onrender.com/api/habits")
-          .then(response => response.json())
+      const API = import.meta.env.VITE_API_URL;
+      fetch(`${API}/habits`)          .then(response => response.json())
           .then(data => {
             this.habits = data
                 .filter(habit => habit.id && habit.id > 0)
