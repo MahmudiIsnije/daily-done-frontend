@@ -230,17 +230,18 @@ export default {
 
             const habit = this.habits.find(h => h.id === id);
 
-
             if (habit) {
-              if (!this.completedHabitsToday.includes(habit)) {
-                this.completedHabitsToday.push(habit);
+              if (!this.completedHabitsToday.find(h => h.id === habit.id)) {
+                this.completedHabitsToday = [...this.completedHabitsToday, habit];
                 console.log("✅ Abgehakt:", habit.name);
                 console.log("📋 Erledigt-Liste:", this.completedHabitsToday);
               }
+
               if (habit.progress < 100) {
                 habit.progress = Math.min(habit.progress + 10, 100);
               }
             }
+
           })
           .catch(error => {
             console.error("Fehler beim Abhaken:", error);
