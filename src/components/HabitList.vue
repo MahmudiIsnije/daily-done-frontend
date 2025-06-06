@@ -2,7 +2,7 @@
   <div class="page-container">
     <h1 class="headline">🌟 Daily Done 🏆</h1>
     <div class="main-grid">
-      
+
       <div class="left-side">
         <h2>Meine Gewohnheiten</h2>
         <p class="quote">{{ quote }}</p>
@@ -230,10 +230,12 @@ export default {
 
             const habit = this.habits.find(h => h.id === id);
 
-            // ⬇️ Fortschritt + erledigt eintragen
+
             if (habit) {
               if (!this.completedHabitsToday.includes(habit)) {
                 this.completedHabitsToday.push(habit);
+                console.log("✅ Abgehakt:", habit.name);
+                console.log("📋 Erledigt-Liste:", this.completedHabitsToday);
               }
               if (habit.progress < 100) {
                 habit.progress = Math.min(habit.progress + 10, 100);
