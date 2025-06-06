@@ -85,7 +85,7 @@ export default {
 
   mounted() {
     this.loadHabits();
-    fetch("https://daily-done-qztv.onrender.com/api/habits/checks/month/2025-06")
+    fetch("http://localhost:8080/api/habits")
         .then(response => response.json())
         .then(data => {
           this.calendarAttributes = data.map(check => {
@@ -114,7 +114,7 @@ export default {
 
   methods: {
     addHabit() {
-      fetch("https://daily-done-qztv.onrender.com/api/habits", {
+      fetch("http://localhost:8080/api/habits", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -144,7 +144,7 @@ export default {
           });
     },
     deleteHabit(id) {
-      fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}`, {
+      fetch(`http://localhost:8080/api/habits${id}`, {
         method: "DELETE"
       })
           .then(() => {
@@ -176,7 +176,7 @@ export default {
         return;
       }
 
-      fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}`, {
+      fetch(`http://localhost:8080/api/habits${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
@@ -198,7 +198,6 @@ export default {
 
             const index = this.habits.findIndex(h => h.id === id);
             if (index !== -1) {
-              // Vue.set(this.habits, index, updated); // Vue 2
               this.habits[index] = {
                 ...this.habits[index],
                 ...updated,
@@ -214,7 +213,7 @@ export default {
           });
     },
     checkHabitToday(id) {
-      fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}/check`, {
+      fetch(`http://localhost:8080/api/habits`, {
         method: "POST"
       })
           .then(response => {
@@ -250,11 +249,11 @@ export default {
 
 
     loadHabits() {
-      fetch("https://daily-done-qztv.onrender.com/api/habits")
+      fetch("http://localhost:8080/api/habits")
           .then(response => response.json())
           .then(data => {
             this.habits = data
-                .filter(habit => habit.id && habit.id > 0) // 💡 nur gültige IDs zulassen
+                .filter(habit => habit.id && habit.id > 0)
                 .map(habit => ({
                   ...habit,
                   progress: 50
