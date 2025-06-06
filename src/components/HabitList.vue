@@ -2,7 +2,7 @@
   <div class="page-container">
     <h1 class="headline">🌟 Daily Done 🏆</h1>
     <div class="main-grid">
-
+      
       <div class="left-side">
         <h2>Meine Gewohnheiten</h2>
         <p class="quote">{{ quote }}</p>
@@ -44,11 +44,20 @@
       <div class="right-side">
         <h2>📅 Kalender</h2>
         <v-calendar is-expanded :attributes="calendarAttributes" />
+
+        <div v-if="completedHabitsToday.length > 0" style="margin-top: 30px;">
+          <h3 style="color: green;">✅ Erledigt heute</h3>
+          <ul>
+            <li v-for="habit in completedHabitsToday" :key="habit.id">
+              {{ habit.name }}
+            </li>
+          </ul>
+        </div>
       </div>
+
     </div>
   </div>
 </template>
-
 
 
 <script>
@@ -68,7 +77,8 @@ export default {
         description: ""
       },
       checkedToday: [],
-      calendarAttributes: []
+      calendarAttributes: [],
+      completedHabitsToday: []
     };
   },
 
@@ -218,16 +228,23 @@ export default {
 
             this.checkedToday.push(id);
 
-            // 🔼 Progress erhöhen
             const habit = this.habits.find(h => h.id === id);
-            if (habit && habit.progress < 100) {
-              habit.progress = Math.min(habit.progress + 10, 100); // Max 100%
+
+            // ⬇️ Fortschritt + erledigt eintragen
+            if (habit) {
+              if (!this.completedHabitsToday.includes(habit)) {
+                this.completedHabitsToday.push(habit);
+              }
+              if (habit.progress < 100) {
+                habit.progress = Math.min(habit.progress + 10, 100);
+              }
             }
           })
           .catch(error => {
             console.error("Fehler beim Abhaken:", error);
           });
     },
+
 
     loadHabits() {
       fetch("https://daily-done-qztv.onrender.com/api/habits")
