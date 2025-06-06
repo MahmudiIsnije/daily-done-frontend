@@ -1,53 +1,54 @@
 <template>
   <div class="page-container">
-    <div class="habit-list">
-      <h2>Meine Gewohnheiten</h2>
-      <p class="quote">{{ quote }}</p>
+    <h1 class="headline">Daily Done</h1>
+    <div class="main-grid">
 
-      <form @submit.prevent="addHabit" class="new-habit-form">
-        <input v-model="newHabit.name" placeholder="Name" required />
-        <input v-model="newHabit.description" placeholder="Beschreibung" required />
-        <button type="submit">➕ Hinzufügen</button>
-      </form>
+      <div class="left-side">
+        <h2>Meine Gewohnheiten</h2>
+        <p class="quote">{{ quote }}</p>
 
-      <ul>
-        <li
-            v-for="habit in habits"
-            :key="habit.id"
-            class="habit-item"
-        >
-          <div v-if="editingHabitId === habit.id">
-            <input v-model="editHabit.name" placeholder="Neuer Name" />
-            <input v-model="editHabit.description" placeholder="Neue Beschreibung" />
-            <button @click="saveEdit(habit.id)">💾 Speichern</button>
-            <button @click="cancelEdit">❌ Abbrechen</button>
-          </div>
-          <div v-else class="habit-header" style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-              <strong>{{ habit.name }}</strong><br />
-              <small>{{ habit.description }}</small>
+        <form @submit.prevent="addHabit" class="new-habit-form">
+          <input v-model="newHabit.name" placeholder="Name" required />
+          <input v-model="newHabit.description" placeholder="Beschreibung" required />
+          <button type="submit">➕ Hinzufügen</button>
+        </form>
+
+        <ul>
+          <li v-for="habit in habits" :key="habit.id" class="habit-item">
+            <div v-if="editingHabitId === habit.id">
+              <input v-model="editHabit.name" placeholder="Neuer Name" />
+              <input v-model="editHabit.description" placeholder="Neue Beschreibung" />
+              <button @click="saveEdit(habit.id)">💾 Speichern</button>
+              <button @click="cancelEdit">❌ Abbrechen</button>
             </div>
-            <div>
-              <button @click="startEdit(habit)">✏️ Bearbeiten</button>
-              <button @click="deleteHabit(habit.id)">🗑️ Löschen</button>
-              <button @click="checkHabitToday(habit.id)">✅ Abhaken</button>
-              <span v-if="checkedToday.includes(habit.id)">Heute erledigt ✅</span>
+            <div v-else class="habit-header">
+              <div>
+                <strong>{{ habit.name }}</strong><br />
+                <small>{{ habit.description }}</small>
+              </div>
+              <div>
+                <button @click="startEdit(habit)">✏️</button>
+                <button @click="deleteHabit(habit.id)">🗑️</button>
+                <button @click="checkHabitToday(habit.id)">✅</button>
+                <span v-if="checkedToday.includes(habit.id)">✅ Heute erledigt</span>
+              </div>
             </div>
-          </div>
+            <div class="progress-bar">
+              <div class="progress-fill" :style="{ width: habit.progress + '%' }"></div>
+            </div>
+          </li>
+        </ul>
+      </div>
 
-          <div class="progress-bar">
-            <div class="progress-fill" :style="{ width: habit.progress + '%' }"></div>
-          </div>
-        </li>
-      </ul>
-      <h2 style="margin-top: 40px;">📅 Kalender</h2>
-      <v-calendar
-          is-expanded
-          :attributes="calendarAttributes"
-      />
+
+      <div class="right-side">
+        <h2>📅 Kalender</h2>
+        <v-calendar is-expanded :attributes="calendarAttributes" />
+      </div>
     </div>
   </div>
 </template>
+
 
 
 <script>
@@ -203,7 +204,6 @@ export default {
           });
     },
     checkHabitToday(id) {
-      console.log("Abhaken wurde gedrückt für Habit:", id);
       fetch(`https://daily-done-qztv.onrender.com/api/habits/${id}/check`, {
         method: "POST"
       })
@@ -215,12 +215,20 @@ export default {
             if (!response.ok) {
               throw new Error("Fehler beim Abhaken");
             }
+
             this.checkedToday.push(id);
+
+            // 🔼 Progress erhöhen
+            const habit = this.habits.find(h => h.id === id);
+            if (habit && habit.progress < 100) {
+              habit.progress = Math.min(habit.progress + 10, 100); // Max 100%
+            }
           })
           .catch(error => {
             console.error("Fehler beim Abhaken:", error);
           });
     },
+
     loadHabits() {
       fetch("https://daily-done-qztv.onrender.com/api/habits")
           .then(response => response.json())
@@ -243,13 +251,69 @@ export default {
 <style scoped>
 
 .page-container {
+  padding: 20px;
+  background-color: #f0f4f8;
   min-height: 100vh;
-  background-color: #D1CFE2;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 60px 20px;
 }
+
+.headline {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 30px;
+  color: #52B2CF;
+}
+
+.main-grid {
+  display: flex;
+  gap: 40px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.left-side {
+  width: 55%;
+  background-color: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.right-side {
+  width: 40%;
+  background-color: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.habit-item {
+  margin-bottom: 20px;
+  padding: 16px;
+  border-left: 6px solid #7EC4CF;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.habit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-bar {
+  height: 10px;
+  background: #eee;
+  border-radius: 5px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #52B2CF;
+  transition: width 0.3s ease;
+}
+
 
 
 .habit-list {
