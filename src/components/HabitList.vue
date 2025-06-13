@@ -85,7 +85,7 @@ export default {
 
   mounted() {
     this.loadHabits();
-    const API = process.env.VUE_APP_API_URL;
+    const API = import.meta.env.VITE_API_URL;
     fetch(`${API}/habits/checks/month/2025-06`)
         .then(response => response.json())
         .then(data => {
