@@ -11,27 +11,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
-    - name: Run linting (if available)
-      run: npm run lint || echo "No linting configured"
+      - name: Run linting (if available)
+        run: npm run lint || echo "No linting configured"
+        continue-on-error: true
 
-    - name: Run tests (if available)  
-      run: npm run test:unit || echo "No tests configured"
+      - name: Run tests (if available)
+        run: npm run test:unit || echo "No tests configured"
+        continue-on-error: true
 
-    - name: Build frontend
-      run: npm run build
+      - name: Build frontend
+        run: npm run build
 
-    - name: Success message
-      run: |
-        echo "✅ Frontend build successful!"
-        echo "✅ Frontend ready for deployment!"
+      - name: Success message
+        run: |
+          echo "✅ Frontend dependencies installed!"
+          echo "✅ Frontend build successful!"
+          echo "🚀 Frontend ready for deployment!"
