@@ -1,4 +1,80 @@
-<template>
+addHabit() {
+const API = "http://localhost:8080/api";
+
+// Frontend-Validierung
+if (!this.newHabit.name.trim()) {
+alert("❌ Habit-Name darf nicht leer sein!");
+return;
+}
+
+if (this.newHabit.name.trim().length < 2) {
+alert("❌ Habit-Name muss mindestens 2 Zeichen haben!");
+return;
+}
+
+if (this.newHabit.name.trim().length > 100) {
+alert("❌ Habit-Name darf maximal 100 Zeichen haben!");
+return;
+}
+
+if (!this.newHabit.description.trim()) {
+alert("❌ Beschreibung darf nicht leer sein!");
+return;
+}
+
+if (this.newHabit.description.trim().length < 5) {
+alert("❌ Beschreibung muss mindestens 5 Zeichen haben!");
+return;
+}
+
+if (this.newHabit.description.trim().length > 500) {
+alert("❌ Beschreibung darf maximal 500 Zeichen haben!");
+return;
+}
+
+if (!this.newHabit.categoryId) {
+alert("❌ Bitte wähle eine Kategorie aus!");
+return;
+}
+
+const habitData = {
+name: this.newHabit.name.trim(),
+description: this.newHabit.description.trim(),
+category: { id: this.newHabit.categoryId }
+};
+
+fetch(`${API}/habits`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify(habitData)
+})
+.then(response => {
+if (!response.ok) {
+return response.json().then(errorData => {
+throw new Error(JSON.stringify(errorData));
+});
+}
+return response.json();
+})
+.then(data => {
+this.habits.push({
+...data,
+progress: 50
+});
+this.newHabit = { name: "", description: "", categoryId: "" };
+this.loadStreakData();
+alert("✅ Habit erfolgreich hinzugefügt!");
+})
+.catch(error => {
+console.error("Fehler beim Erstellen der Habit:", error);
+try {
+const errorObj = JSON.parse(error.message);
+if (errorObj.name) {
+alert("❌ " + errorObj.name);
+} else if (errorObj.description) {
+alert("❌ " + errorObj.description);<template>
   <div class="app-container">
     <!-- Header -->
     <header class="app-header">
@@ -1025,4 +1101,4 @@ export default {
     min-width: 200px;
   }
 }
-</style>
+</style>s

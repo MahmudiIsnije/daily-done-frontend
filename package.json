@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --port 3000",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "test:unit": "jest"
   },
   "dependencies": {
     "core-js": "^3.8.3",
