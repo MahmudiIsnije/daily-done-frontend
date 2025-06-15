@@ -40,6 +40,6 @@ jobs:
 
       - name: Success message
         run: |
-          echo "✅ Frontend dependencies installed!"
-          echo "✅ Frontend build successful!"
-          echo "🚀 Frontend ready for deployment!"
+          echo " Frontend dependencies installed!"
+          echo " Frontend build successful!"
+          echo " Frontend ready for deployment!"
