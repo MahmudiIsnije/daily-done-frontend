@@ -1,5 +1,5 @@
 addHabit() {
-const API = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+const API = process.env.VUE_APP_API_URL || "http://localhost:8080/api";
 
 // Frontend-Validierung
 if (!this.newHabit.name.trim()) {
@@ -317,7 +317,7 @@ export default {
     },
 
     loadCategories() {
-      const API = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+      const API = process.env.VUE_APP_API_URL || "http://localhost:8080/api";
       fetch(`${API}/categories`)
           .then(response => response.json())
           .then(data => {
@@ -333,7 +333,7 @@ export default {
     },
 
     loadCalendarData() {
-      const API = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+      const API = process.env.VUE_APP_API_URL || "http://localhost:8080/api";
       fetch(`${API}/habits/checks/month/2025-06`)
           .then(response => response.json())
           .then(data => {
@@ -361,7 +361,7 @@ export default {
     },
 
     addHabit() {
-      const API = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+      const API = process.env.VUE_APP_API_URL || "http://localhost:8080/api";
       if (!this.newHabit.name.trim() || !this.newHabit.description.trim() || !this.newHabit.categoryId) {
         alert("Bitte fülle alle Felder aus.");
         return;
@@ -418,7 +418,7 @@ export default {
         return;
       }
 
-      const API = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+      const API = process.env.VUE_APP_API_URL || "http://localhost:8080/api";
       fetch(`${API}/habits/${id}`, {
         method: "PUT",
         headers: {
@@ -447,7 +447,7 @@ export default {
     },
 
     deleteHabit(id) {
-      const API = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+      const API = process.env.VUE_APP_API_URL || "http://localhost:8080/api";
       fetch(`${API}/habits/${id}`, {
         method: "DELETE"
       })
@@ -466,7 +466,7 @@ export default {
     },
 
     checkHabitToday(id) {
-      const API = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+      const API = process.env.VUE_APP_API_URL || "http://localhost:8080/api";
       fetch(`${API}/habits/${id}/check`, {
         method: "POST"
       })
@@ -498,7 +498,7 @@ export default {
     },
 
     loadHabits() {
-      const API = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+      const API = process.env.VUE_APP_API_URL || "http://localhost:8080/api";
       fetch(`${API}/habits`)
           .then(response => response.json())
           .then(data => {
@@ -518,7 +518,7 @@ export default {
 
     // NEUE STREAK-METHODEN
     loadStreakData() {
-      const API = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+      const API = process.env.VUE_APP_API_URL || "http://localhost:8080/api";
       fetch(`${API}/habits/streaks/all`)
           .then(response => response.json())
           .then(data => {
