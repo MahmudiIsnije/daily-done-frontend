@@ -304,6 +304,7 @@ export default {
   },
 
   mounted() {
+    console.log("API URL:", process.env.VUE_APP_API_URL);
     this.loadCategories();
     this.loadHabits();
     this.loadCalendarData();
